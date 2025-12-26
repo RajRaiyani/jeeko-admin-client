@@ -23,8 +23,7 @@ export const productFormSchema = z.object({
     .default([]),
   sale_price: z
     .number()
-    .min(0, "Sale price must be greater than or equal to 0")
-    .transform((val) => Math.round(val * 100)),
+    .min(0, "Sale price must be greater than or equal to 0"),
   image_id: z.string().uuid({ version: "v4", message: "Invalid image ID" }),
 });
 
