@@ -9,6 +9,7 @@ interface TagsInputProps {
   onBlur?: () => void;
   placeholder?: string;
   maxTags?: number;
+  maxLength?: number;
   disabled?: boolean;
   className?: string;
 }
@@ -19,6 +20,7 @@ export function TagsInput({
   onBlur,
   placeholder = "Type and press Enter to add tags",
   maxTags = 20,
+  maxLength,
   disabled = false,
   className,
 }: TagsInputProps) {
@@ -33,7 +35,8 @@ export function TagsInput({
       trimmedTag &&
       !tags.includes(trimmedTag) &&
       tags.length < maxTags &&
-      trimmedTag.length > 0
+      trimmedTag.length > 0 &&
+      (!maxLength || trimmedTag.length <= maxLength)
     ) {
       onChange([...tags, trimmedTag]);
       setInputValue("");
@@ -59,7 +62,12 @@ export function TagsInput({
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setInputValue(e.target.value);
+    const newValue = e.target.value;
+    // Enforce maxLength if provided
+    if (maxLength && newValue.length > maxLength) {
+      return;
+    }
+    setInputValue(newValue);
   };
 
   const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
@@ -122,6 +130,7 @@ export function TagsInput({
           onBlur={onBlur}
           placeholder={tags.length === 0 ? placeholder : ""}
           disabled={disabled || tags.length >= maxTags}
+          maxLength={maxLength}
           className="flex-1 min-w-[120px] border-0 bg-transparent p-0 text-sm outline-none placeholder:text-muted-foreground focus:outline-none"
         />
       </div>
@@ -138,11 +147,18 @@ export function TagsInput({
             </>
           )}
         </span>
-        {tags.length < maxTags && (
-          <span className="text-muted-foreground/70">
-            Press Enter or comma to add
-          </span>
-        )}
+        <div className="flex items-center gap-2">
+          {maxLength && (
+            <span className="text-muted-foreground/70">
+              {inputValue.length}/{maxLength}
+            </span>
+          )}
+          {tags.length < maxTags && (
+            <span className="text-muted-foreground/70">
+              Press Enter or comma to add
+            </span>
+          )}
+        </div>
       </div>
     </div>
   );

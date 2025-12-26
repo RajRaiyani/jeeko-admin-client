@@ -71,6 +71,8 @@ export default function AddOrUpdateProduct() {
       name: "",
       description: "",
       tags: [],
+      points: [],
+      metadata: {},
       sale_price: 0,
       image_id: "",
     },
@@ -86,22 +88,27 @@ export default function AddOrUpdateProduct() {
           )
         : [];
 
+      // Ensure points is always an array
+      const points = Array.isArray(product.points)
+        ? product.points.filter(
+            (point) =>
+              point && typeof point === "string" && point.trim().length > 0
+          )
+        : [];
+
       // Get primary image ID (backend now uses single image)
       const primaryImage = product.images?.find((img) => img.is_primary);
       const imageId =
         primaryImage?.image_id || product.images?.[0]?.image_id || "";
-
-      // Convert sale_price from paise to rupees (backend expects rupees and multiplies by 100)
-      const salePriceInRupees = product.sale_price
-        ? product.sale_price / 100
-        : 0;
 
       form.reset({
         category_id: product.category_id || "",
         name: product.name || "",
         description: product.description || "",
         tags: tags,
-        sale_price: salePriceInRupees,
+        points: points,
+        metadata: product.metadata || {},
+        sale_price: product.sale_price_in_rupees,
         image_id: imageId,
       });
     }
@@ -132,22 +139,15 @@ export default function AddOrUpdateProduct() {
   };
 
   const onSubmit = (data: ProductFormValues) => {
-    // Ensure tags is always an array
-    const tags = Array.isArray(data.tags)
-      ? data.tags.filter(
-          (tag) => tag && typeof tag === "string" && tag.trim().length > 0
-        )
-      : [];
-
-    // Backend expects sale_price in rupees (it multiplies by 100 internally)
-    // So we send the value as-is (already in rupees)
+    // Schema has already transformed sale_price from rupees to paise
     const submitData = {
       category_id: data.category_id,
       name: data.name,
       description: data.description || "",
-      tags: tags,
-      metadata: {},
-      sale_price: data.sale_price, // Already in rupees
+      tags: data.tags || [],
+      points: data.points || [],
+      metadata: data.metadata || {},
+      sale_price: data.sale_price,
       image_id: data.image_id,
     };
 
@@ -316,6 +316,31 @@ export default function AddOrUpdateProduct() {
                         disabled={isPending || showCropper}
                       />
                     </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="points"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Points</FormLabel>
+                    <FormControl>
+                      <TagsInput
+                        value={field.value || []}
+                        onChange={field.onChange}
+                        onBlur={field.onBlur}
+                        placeholder="Type and press Enter to add points (max 70 characters each)"
+                        maxLength={70}
+                        disabled={isPending || showCropper}
+                      />
+                    </FormControl>
+                    <p className="text-sm text-muted-foreground">
+                      Add key points about the product (max 70 characters per
+                      point)
+                    </p>
                     <FormMessage />
                   </FormItem>
                 )}

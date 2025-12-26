@@ -22,6 +22,7 @@ export interface Product {
   name: string;
   description?: string;
   tags: string[];
+  points: string[];
   metadata: Record<string, any>;
   sale_price: number;
   sale_price_in_rupees?: number;
@@ -36,6 +37,7 @@ export interface CreateProductData {
   name: string;
   description?: string;
   tags: string[];
+  points: string[];
   metadata: Record<string, any>;
   sale_price: number;
   image_id: string;
@@ -46,6 +48,7 @@ export interface UpdateProductData {
   name: string;
   description?: string;
   tags: string[];
+  points: string[];
   metadata: Record<string, any>;
   sale_price: number;
   image_id: string;

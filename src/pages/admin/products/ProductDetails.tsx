@@ -365,6 +365,25 @@ export default function ProductDetails() {
               </div>
             )}
 
+            {product.points && product.points.length > 0 && (
+              <div>
+                <p className="text-sm font-medium text-muted-foreground mb-2">
+                  Points
+                </p>
+                <ul className="space-y-2">
+                  {product.points.map((point, idx) => (
+                    <li
+                      key={idx}
+                      className="flex items-start gap-2 text-base"
+                    >
+                      <span className="text-primary mt-1">•</span>
+                      <span>{point}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
             {product.created_at && (
               <div>
                 <p className="text-sm font-medium text-muted-foreground">

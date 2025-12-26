@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 export const productFormSchema = z.object({
-  category_id: z.string().uuid({ message: "Please select a category" }),
+  category_id: z.string().uuid({ version: "v4", message: "Invalid category ID" }),
   name: z
     .string()
     .trim()
@@ -14,13 +14,20 @@ export const productFormSchema = z.object({
     .max(2000, "Description must be less than 2000 characters")
     .optional(),
   tags: z
-    .array(z.string().trim().min(1))
-    .max(20, "Maximum 20 tags allowed"),
+    .array(z.string())
+    .max(20, "Maximum 20 tags allowed")
+    .default([]),
+  metadata: z.object({}).default({}),
+  points: z
+    .array(z.string().trim().max(70, "Points must be less than 70 characters"))
+    .default([]),
   sale_price: z
     .number()
-    .min(0, "Sale price must be greater than or equal to 0"),
-  image_id: z.string().uuid({ message: "Please select an image" }),
+    .min(0, "Sale price must be greater than or equal to 0")
+    .transform((val) => Math.round(val * 100)),
+  image_id: z.string().uuid({ version: "v4", message: "Invalid image ID" }),
 });
 
-export type ProductFormValues = z.infer<typeof productFormSchema>;
+// Use z.input to get the type before transformation (for form values)
+export type ProductFormValues = z.input<typeof productFormSchema>;
 
