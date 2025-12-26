@@ -2,22 +2,27 @@ import { useParams, Link, useNavigate } from "react-router-dom";
 import { ArrowLeft, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { useInquiry, useDeleteInquiry, useUpdateInquiryStatus } from "@/hooks/useInquiries";
+import {
+  useInquiry,
+  useDeleteInquiry,
+  useUpdateInquiryStatus,
+} from "@/hooks/useInquiries";
 import { toast } from "react-hot-toast";
 
-const statusColors = {
-  pending: "bg-yellow-100 text-yellow-800",
-  in_progress: "bg-blue-100 text-blue-800",
-  resolved: "bg-green-100 text-green-800",
-  closed: "bg-gray-100 text-gray-800",
-};
+// const statusColors = {
+//   pending: "bg-yellow-100 text-yellow-800",
+//   in_progress: "bg-blue-100 text-blue-800",
+//   resolved: "bg-green-100 text-green-800",
+//   closed: "bg-gray-100 text-gray-800",
+// };
 
 export default function InquiryDetails() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const { data, isLoading, error } = useInquiry(id);
+  const { data, isLoading, error } = useInquiry(id || "");
   const { mutate: deleteInquiry, isPending: isDeleting } = useDeleteInquiry();
-  const { mutate: updateStatus, isPending: isUpdating } = useUpdateInquiryStatus();
+  const { mutate: updateStatus, isPending: isUpdating } =
+    useUpdateInquiryStatus();
 
   const inquiry = data?.data;
 
@@ -29,7 +34,9 @@ export default function InquiryDetails() {
           navigate("/inquiries");
         },
         onError: (error: any) => {
-          toast.error(error.response?.data?.error || "Failed to delete inquiry");
+          toast.error(
+            error.response?.data?.error || "Failed to delete inquiry"
+          );
         },
       });
     }
@@ -174,4 +181,3 @@ export default function InquiryDetails() {
     </div>
   );
 }
-
