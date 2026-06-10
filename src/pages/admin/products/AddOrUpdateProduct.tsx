@@ -33,7 +33,7 @@ export default function AddOrUpdateProduct() {
   const isEditing = !!id;
 
   const { data: productData, isLoading: isLoadingProduct } = useGetProduct(
-    id || ""
+    id || "",
   );
   const { data: categoriesData } = useGetProductCategories();
   const { mutate: createProduct, isPending: isCreating } = useCreateProduct();
@@ -60,8 +60,8 @@ export default function AddOrUpdateProduct() {
     ? Array.isArray((categoriesData as any)?.data)
       ? (categoriesData as any).data
       : Array.isArray(categoriesData)
-      ? categoriesData
-      : []
+        ? categoriesData
+        : []
     : [];
 
   const form = useForm<ProductFormValues>({
@@ -84,7 +84,7 @@ export default function AddOrUpdateProduct() {
       // Ensure tags is always an array
       const tags = Array.isArray(product.tags)
         ? product.tags.filter(
-            (tag) => tag && typeof tag === "string" && tag.trim().length > 0
+            (tag) => tag && typeof tag === "string" && tag.trim().length > 0,
           )
         : [];
 
@@ -92,7 +92,7 @@ export default function AddOrUpdateProduct() {
       const points = Array.isArray(product.points)
         ? product.points.filter(
             (point) =>
-              point && typeof point === "string" && point.trim().length > 0
+              point && typeof point === "string" && point.trim().length > 0,
           )
         : [];
 
@@ -158,7 +158,7 @@ export default function AddOrUpdateProduct() {
           onSuccess: () => {
             navigate("/products");
           },
-        }
+        },
       );
     } else {
       createProduct(submitData, {
@@ -186,7 +186,7 @@ export default function AddOrUpdateProduct() {
           image={imageToCrop}
           onCropComplete={(blob) =>
             handleCropComplete(blob, (imageId) =>
-              handleImageUploadSuccess(imageId)
+              handleImageUploadSuccess(imageId),
             )
           }
           onCancel={closeCropper}
@@ -305,7 +305,7 @@ export default function AddOrUpdateProduct() {
                 name="tags"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Tags</FormLabel>
+                    <FormLabel>Keywords</FormLabel>
                     <FormControl>
                       <TagsInput
                         value={field.value || []}
@@ -456,8 +456,8 @@ export default function AddOrUpdateProduct() {
                       ? "Updating..."
                       : "Creating..."
                     : isEditing
-                    ? "Update Product"
-                    : "Create Product"}
+                      ? "Update Product"
+                      : "Create Product"}
                 </Button>
                 <Button
                   type="button"
