@@ -12,7 +12,7 @@ import { useGetProductCategories } from "@/hooks/useProductCategories";
 import { useProductImageUpload } from "@/hooks/useProductImageUpload";
 import { ImageCropper } from "@/components/shared/ImageCropper";
 import { TagsInput } from "@/components/shared/TagsInput";
-import type { Product } from "@/types/product.type";
+import { PRODUCT_BRANDS, type Product } from "@/types/product.type";
 import { X, Plus } from "lucide-react";
 import {
   Form,
@@ -68,6 +68,7 @@ export default function AddOrUpdateProduct() {
     resolver: zodResolver(productFormSchema),
     defaultValues: {
       category_id: "",
+      brand: "jeeko",
       name: "",
       description: "",
       tags: [],
@@ -103,6 +104,7 @@ export default function AddOrUpdateProduct() {
 
       form.reset({
         category_id: product.category_id || "",
+        brand: product.brand || "jeeko",
         name: product.name || "",
         description: product.description || "",
         tags: tags,
@@ -142,6 +144,7 @@ export default function AddOrUpdateProduct() {
     // Schema has already transformed sale_price from rupees to paise
     const submitData = {
       category_id: data.category_id,
+      brand: data.brand || "jeeko",
       name: data.name,
       description: data.description || "",
       tags: data.tags || [],
@@ -226,6 +229,29 @@ export default function AddOrUpdateProduct() {
                         {categories.map((cat: any) => (
                           <option key={cat.id} value={cat.id}>
                             {cat.name}
+                          </option>
+                        ))}
+                      </select>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="brand"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Brand *</FormLabel>
+                    <FormControl>
+                      <select
+                        {...field}
+                        className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-base shadow-xs transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:text-sm"
+                      >
+                        {PRODUCT_BRANDS.map((brand) => (
+                          <option key={brand} value={brand}>
+                            {brand === "jeeko" ? "Jeeko" : "Kishan King"}
                           </option>
                         ))}
                       </select>

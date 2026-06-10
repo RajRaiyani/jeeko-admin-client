@@ -123,11 +123,19 @@ export default function Products() {
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  {product.category && (
-                    <p className="text-sm text-muted-foreground mb-2">
-                      Category: {product.category.name}
+                  <div className="flex flex-wrap gap-2 mb-2">
+                    {product.category && (
+                      <p className="text-sm text-muted-foreground">
+                        Category: {product.category.name}
+                      </p>
+                    )}
+                    <p className="text-sm text-muted-foreground capitalize">
+                      Brand:{" "}
+                      {(product.brand || "jeeko") === "kishan king"
+                        ? "Kishan King"
+                        : "Jeeko"}
                     </p>
-                  )}
+                  </div>
                   {product.description && (
                     <p className="text-sm text-muted-foreground line-clamp-2 mb-2">
                       {product.description}

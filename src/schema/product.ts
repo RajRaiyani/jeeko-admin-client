@@ -1,7 +1,9 @@
 import { z } from "zod";
+import { PRODUCT_BRANDS } from "@/types/product.type";
 
 export const productFormSchema = z.object({
   category_id: z.string().uuid({ version: "v4", message: "Invalid category ID" }),
+  brand: z.enum(PRODUCT_BRANDS).default("jeeko"),
   name: z
     .string()
     .trim()

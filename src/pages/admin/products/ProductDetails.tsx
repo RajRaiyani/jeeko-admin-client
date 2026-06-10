@@ -328,6 +328,15 @@ export default function ProductDetails() {
             )}
 
             <div>
+              <p className="text-sm font-medium text-muted-foreground">Brand</p>
+              <p className="text-lg capitalize">
+                {(product.brand || "jeeko") === "kishan king"
+                  ? "Kishan King"
+                  : "Jeeko"}
+              </p>
+            </div>
+
+            <div>
               <p className="text-sm font-medium text-muted-foreground">
                 Sale Price
               </p>

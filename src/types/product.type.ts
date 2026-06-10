@@ -10,6 +10,10 @@ export interface ProductImageData {
   image?: ProductImage;
 }
 
+export const PRODUCT_BRANDS = ["jeeko", "kishan king"] as const;
+
+export type ProductBrand = (typeof PRODUCT_BRANDS)[number];
+
 export interface ProductCategory {
   id: string;
   name: string;
@@ -19,6 +23,7 @@ export interface ProductCategory {
 export interface Product {
   id: string;
   category_id: string;
+  brand: ProductBrand;
   name: string;
   description?: string;
   tags: string[];
@@ -34,6 +39,7 @@ export interface Product {
 
 export interface CreateProductData {
   category_id: string;
+  brand: ProductBrand;
   name: string;
   description?: string;
   tags: string[];
@@ -45,6 +51,7 @@ export interface CreateProductData {
 
 export interface UpdateProductData {
   category_id: string;
+  brand: ProductBrand;
   name: string;
   description?: string;
   tags: string[];
