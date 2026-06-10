@@ -1,0 +1,7 @@
+services:
+  jeeko-admin-client:
+    image: rajraiyani/jeeko-admin-client:latest
+    container_name: jeeko-admin-client
+    pull_policy: always
+    ports:
+      - "5177:80"
